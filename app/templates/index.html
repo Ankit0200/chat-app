@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<h1 id="ct">Group name:: {{groupname}}</h1>
+
+<textarea id="message-area" disabled cols="50" rows="20">
+    {% for chat in chats%}
+      {{chat.message}}
+    {% endfor %}
+</textarea>
+<br>
+<br>
+<br>
+<textarea id="text_box" rows="2" cols="60">
+
+</textarea>
+<br>
+<button type="submit" id="submit-message">Submit</button>
+
+{{groupname| json_script:"group_name"}}
+<script>
+    // var ws = new WebSocket("ws://127.0.0.1:8000/ws/sc/")
+    // ws.onopen = function (event) {
+    //     console.log("Connected")
+    //
+    // }
+
+    //This is runned when we receive some message
+    // ws.onmessage = function (event) {
+    //     console.log("Message from server ", event['data'])
+    //     json_obj=JSON.parse(event['data'])
+    //     console.log(json_obj)
+    //     document.querySelector("#message-area").value+=json_obj.msg
+    // }
+    // ws.onerror = function (ev) {
+    //     console.log("Some error occured", ev)
+    // }
+    // document.querySelector("#submit-message").onclick = function () {
+    //
+    //     const message_received = document.getElementById("text_box").value
+    //     ws.send(JSON.stringify({'msg': message_received}))
+    //     document.getElementById("text_box").value=""
+
+
+    <!--}-->
+
+    //     Now we want to build dynamic group name
+    const groupName = JSON.parse(document.getElementById("group_name").textContent)
+    console.log(groupName)
+
+    var ws = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/sc/'
+        + groupName
+        + '/'
+    )
+    ws.onopen = function () {
+        console.log("Connected")
+
+
+    }
+    ws.onmessage = function (event) {
+        console.log("message received from the server", event['data'])
+        json_obj = JSON.parse(event['data'])
+        document.querySelector("#message-area").value += json_obj.msg
+
+
+    }
+    document.querySelector("#submit-message").onclick = function () {
+        console.log("FUC")
+
+        const message_received = document.getElementById("text_box").value
+        ws.send(JSON.stringify({'msg': message_received}))
+        document.getElementById("text_box").value = ""
+
+
+    }
+
+
+</script>
+
+</body>
+
+</html>
