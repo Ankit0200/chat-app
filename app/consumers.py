@@ -8,6 +8,7 @@ from .models import *
 
 class MySyncConsumer(SyncConsumer):
 
+
     # THIS IS CALLED WHEN THE WEBSOCKET IS FORMED.
     def websocket_connect(self, event):
         print(" Websocket connected")
